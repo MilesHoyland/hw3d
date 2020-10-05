@@ -48,9 +48,11 @@ int CALLBACK WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance, // not used
 	LPSTR     lpCmdLine, // recieve single strings to process from the cmd line
-	int       nCmdShow )
+	int       nCmdShow)
 {
-	Window wnd(800,300, "First Game Window");
+	try
+	{
+	Window wnd(800, 300, "First Game Window");
 
 	// message pump
 	MSG msg;
@@ -65,10 +67,20 @@ int CALLBACK WinMain(
 	{
 		return -1;
 	}
-	else {
 		return msg.wParam; // exit the code with the user defined exit code of 69 instead of 0
+	// wParam here is the value passed to PostQuitMessage
 	}
-
-	
-	return 0;
+	catch (const  MiliException& e)
+	{
+		MessageBox(nullptr, e.what(), e.GetType(), MB_OK | MB_ICONEXCLAMATION);
+	}
+	catch (const std::exception & e)
+	{
+		MessageBox(nullptr, e.what(), "Standard Exception", MB_OK | MB_ICONEXCLAMATION);
+	}
+	catch (...)
+	{
+		MessageBox(nullptr, "No details available", "Unknown Exception", MB_OK | MB_ICONEXCLAMATION);
+	}
+	return -1;
 }
